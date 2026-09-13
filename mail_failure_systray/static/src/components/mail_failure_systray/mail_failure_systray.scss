@@ -1,0 +1,9 @@
+.o_mail_failure_menu {
+    width: 420px;
+    max-width: 95vw;
+    .o_mail_failure_items {
+        // Leave mixed-unit comparison to the browser, not LibSass.
+        max-height: unquote("min(480px, 65vh)");
+        overflow-y: auto;
+    }
+}

@@ -1,0 +1,7 @@
+<odoo>
+    <record id="my_email_rule" model="ir.rule">
+        <field name="name">Own emails in allowed companies</field>
+        <field name="model_id" ref="model_mail_failure_email"/>
+        <field name="domain_force">[('owner_id', '=', user.id), ('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

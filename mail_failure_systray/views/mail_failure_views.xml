@@ -1,0 +1,48 @@
+<odoo>
+    <record id="my_email_list" model="ir.ui.view">
+        <field name="name">mail.failure.email.list</field>
+        <field name="model">mail.failure.email</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false" decoration-danger="state == 'exception'">
+                <field name="state" widget="badge"/>
+                <field name="subject"/>
+                <field name="recipients"/>
+                <field name="document"/>
+                <field name="model" optional="hide"/>
+                <field name="created_date"/>
+                <field name="scheduled_date" optional="hide"/>
+                <field name="sent_date" optional="show"/>
+                <field name="failure_reason" optional="show"/>
+                <field name="queue_available" column_invisible="True"/>
+                <button name="action_open_document" type="object" string="Open Document" icon="fa-external-link" invisible="not document"/>
+                <button name="action_retry" type="object" string="Retry" invisible="state != 'exception' or not queue_available"/>
+                <button name="action_send_now" type="object" string="Send Now" invisible="state != 'outgoing' or not queue_available"/>
+            </list>
+        </field>
+    </record>
+    <record id="my_email_search" model="ir.ui.view">
+        <field name="name">mail.failure.email.search</field>
+        <field name="model">mail.failure.email</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="subject"/><field name="recipients"/>
+                <filter name="my_emails" string="My Emails" domain="[('owner_id', '=', uid)]"/>
+                <separator/>
+                <filter name="failed" string="Failed" domain="[('state', '=', 'exception')]"/>
+                <filter name="pending" string="Pending" domain="[('state', '=', 'outgoing')]"/>
+                <filter name="sent" string="Sent" domain="[('state', '=', 'sent')]"/>
+                <separator/>
+                <filter name="today" string="Today" domain="[('created_date', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0, 0, 0)).to_utc())]"/>
+                <filter name="week" string="Last 7 Days" domain="[('created_date', '&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_my_emails" model="ir.actions.act_window">
+        <field name="name">My Emails</field>
+        <field name="res_model">mail.failure.email</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_my_emails': 1}</field>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">No email issues to show</p><p>Your outgoing email metadata appears here after sending an email.</p></field>
+    </record>
+    <menuitem id="menu_my_emails" name="My Emails" action="action_my_emails" groups="base.group_user" sequence="95" web_icon="mail_failure_systray,static/description/icon.png"/>
+</odoo>

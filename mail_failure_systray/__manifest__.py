@@ -8,7 +8,6 @@
     "support": "erpmitchellodoo@gmail.com",
     'images': ['static/description/banner.png'],
     'license': 'LGPL-3',
-    'author': 'Custom Development',
     'depends': ['mail', 'web'],
     'data': ['security/security.xml', 'security/ir.model.access.csv', 'views/mail_failure_views.xml'],
     'assets': {'web.assets_backend': ['mail_failure_systray/static/src/components/mail_failure_systray/*']},

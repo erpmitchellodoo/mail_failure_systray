@@ -1,0 +1,44 @@
+<templates xml:space="preserve">
+    <t t-name="mail_failure_systray.Systray">
+        <Dropdown state="dropdown" position="'bottom-end'" beforeOpen.bind="beforeOpen" menuClass="'o_mail_failure_menu'">
+            <button title="My Email Issues" aria-label="My Email Issues">
+                <i class="fa fa-envelope-o me-1" aria-hidden="true"/> <span>Mail</span>
+                <span t-if="state.failed_count" class="badge rounded-pill text-bg-danger ms-1"><i class="fa fa-exclamation-triangle me-1"/><t t-esc="state.failed_count"/></span>
+            </button>
+            <t t-set-slot="content">
+                <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+                    <strong>My Email Issues</strong>
+                    <button class="btn btn-link p-0" title="Refresh" aria-label="Refresh emails" t-on-click="() => this.refresh()" t-att-disabled="state.loading or state.busy"><i class="fa fa-refresh"/></button>
+                </div>
+                <div class="nav nav-tabs px-2" role="tablist">
+                    <button t-foreach="tabs" t-as="tab" t-key="tab.key" role="tab" t-att-aria-selected="state.category === tab.key ? 'true' : 'false'" t-att-class="'nav-link ' + (state.category === tab.key ? 'active' : '')" t-on-click="() => this.selectCategory(tab.key)"><t t-esc="tab.label"/></button>
+                </div>
+                <div class="o_mail_failure_items" aria-live="polite">
+                    <div t-if="state.loading" class="p-3 text-muted">Loading emails…</div>
+                    <div t-elif="state.error" class="p-3 text-warning" t-esc="state.error"/>
+                    <div t-elif="!state.rows.length" class="p-4 text-muted text-center">No emails in this category.</div>
+                    <t t-else="">
+                        <article t-foreach="state.rows" t-as="row" t-key="row.id" class="p-3 border-bottom">
+                            <div t-if="row.state === 'exception'" class="text-danger fw-bold"><i class="fa fa-exclamation-triangle me-1"/>Delivery Failed</div>
+                            <div t-elif="row.state === 'outgoing'" class="text-muted">Pending</div>
+                            <div t-else="" class="text-success">Sent</div>
+                            <div class="fw-bold text-break" t-esc="row.subject"/>
+                            <div t-if="row.document" class="text-break" t-esc="row.document"/>
+                            <small t-if="row.document" class="text-muted" t-esc="row.model"/>
+                            <div class="text-break" t-esc="row.recipients"/>
+                            <div t-if="row.failure_reason" class="text-danger mt-1" t-esc="row.failure_reason"/>
+                            <small class="text-muted" t-att-title="this.date(row.sent_date || row.created_date)" t-esc="this.age(row.sent_date || row.created_date)"/>
+                            <div t-if="row.state === 'outgoing' and row.scheduled_date" class="small text-muted">Scheduled: <t t-esc="this.date(row.scheduled_date)"/></div>
+                            <div t-if="!row.queue_available and row.state === 'exception'" class="small text-muted mt-1">Odoo removed this queue item. Open the document to send a new email.</div>
+                            <div class="d-flex gap-2 mt-2">
+                                <button t-if="row.document" class="btn btn-sm btn-outline-secondary" t-on-click="() => this.openDocument(row)">Open Document</button>
+                                <button t-if="row.queue_available and row.state !== 'sent'" class="btn btn-sm btn-primary" t-att-disabled="state.busy" t-on-click="() => this.process(row)"><t t-if="row.state === 'exception'">Retry</t><t t-else="">Send Now</t></button>
+                            </div>
+                        </article>
+                    </t>
+                </div>
+                <button class="btn btn-link w-100 p-3" t-on-click="openAll">View All My Emails</button>
+            </t>
+        </Dropdown>
+    </t>
+</templates>

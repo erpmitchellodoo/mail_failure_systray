@@ -1,0 +1,17 @@
+{
+    'name': 'My Unsent Emails - Email Failure & Retry Center',
+    'version': '19.0.1.0.0',
+    'category': 'Productivity',
+    'summary': 'Your outgoing email failures and native retry controls in the systray',
+    "author": "Mitchel Admin",
+    "maintainer": "Mitchel Admin",
+    "support": "erpmitchellodoo@gmail.com",
+    'images': ['static/description/banner.png'],
+    'license': 'LGPL-3',
+    'author': 'Custom Development',
+    'depends': ['mail', 'web'],
+    'data': ['security/security.xml', 'security/ir.model.access.csv', 'views/mail_failure_views.xml'],
+    'assets': {'web.assets_backend': ['mail_failure_systray/static/src/components/mail_failure_systray/*']},
+    'installable': True,
+    'post_init_hook': 'post_init_hook',
+}

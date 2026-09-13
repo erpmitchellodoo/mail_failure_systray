@@ -12,5 +12,7 @@
     'data': ['security/security.xml', 'security/ir.model.access.csv', 'views/mail_failure_views.xml'],
     'assets': {'web.assets_backend': ['mail_failure_systray/static/src/components/mail_failure_systray/*']},
     'installable': True,
+    'application': False,
+    'auto_install': False,
     'post_init_hook': 'post_init_hook',
 }

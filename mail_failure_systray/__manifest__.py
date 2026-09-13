@@ -3,6 +3,7 @@
     'version': '18.0.2.1.1',
     'category': 'Productivity',
     'summary': 'Your outgoing email failures and native retry controls in the systray',
+    'description': """Your outgoing email failures and native retry controls in the systray""",
     "author": "Mitchel Admin",
     "maintainer": "Mitchel Admin",
     "support": "erpmitchellodoo@gmail.com",
